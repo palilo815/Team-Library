@@ -1,3 +1,6 @@
+/**
+ * @include miller_rabin
+ */
 struct pollard_rho : miller_rabin {
     u64 pollard(u64 n) {
         auto f = [&](u64 x) { return modular::mul(x, x, n) + 1; };
