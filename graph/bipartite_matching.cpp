@@ -4,16 +4,16 @@ using namespace std;
 /**
  * @brief 정점이 두 그룹(L, R)으로 나뉘는 이분 그래프일 때 최대 매칭과, 최소 점 덮개를 구함.
  * @example bipartite_matching solver(n, m);
- *          
- *          cout << solver.maximum_matching() << endl;
- *          
- *          vector<int> vtx = solver.minimum_vertex_cover;
- *          for (const auto& id : vtx) {
- *              if (id >= 0)
- *                  cout << id << " in L" << endl;
- *              else
- *                  cout << ~id << " in R" << endl;
- *          }
+
+            cout << solver.maximum_matching() << endl;
+
+            vector<int> vtx = solver.minimum_vertex_cover();
+            for (const auto& id : vtx) {
+                if (id >= 0)
+                    cout << id << " in L" << endl;
+                else
+                    cout << ~id << " in R" << endl;
+            }
  */
 struct bipartite_matching {
     /**
@@ -108,11 +108,3 @@ private:
         return false;
     }
 };
-
-int main() {
-    cin.tie(nullptr)->sync_with_stdio(false);
-#ifdef home
-    freopen("in", "r", stdin);
-    freopen("out", "w", stdout);
-#endif
-}
