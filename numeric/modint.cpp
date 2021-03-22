@@ -8,10 +8,6 @@ struct mint {
         if (v < 0) v += mod;
     }
 
-    /**
-     * @note O(log mod)
-     * @return `inv`, num * inv = 1 (% mod)
-     */
     mint inv() const {
         if (is_prime) {
             assert(v);
@@ -31,19 +27,11 @@ struct mint {
             return res;
         }
     }
-    /**
-     * @note O(log mod)
-     * @return -num % mod
-     */
     mint neg() const {
         mint res;
         res.v = v ? mod - v : 0;
         return res;
     }
-    /**
-     * @note O(log p)
-     * @return num^p % mod
-     */
     mint pow(int64_t p) const {
         assert(p >= 0);
         int64_t x = v, r = 1;
