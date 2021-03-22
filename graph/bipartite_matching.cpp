@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 /**
  * @brief 정점이 두 그룹(L, R)으로 나뉘는 이분 그래프일 때 최대 매칭과, 최소 점 덮개를 구함.
  * @example bipartite_matching solver(n, m);
