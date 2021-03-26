@@ -1,9 +1,9 @@
 /**
- * find kth element
+ * dynamic kth element
  */
 template <typename T>
 struct BIT {
-    BIT(int _n) : n(1 << __lg(_n - 1) + 1), tree(_n + 1) {}
+    BIT(int _n) : n(1 << __lg(_n - 1) + 1), tree(n + 1) {}
     void update(int i, T val) {
         assert(0 <= i and i < n);
         for (++i; i <= n; i += i & -i)
