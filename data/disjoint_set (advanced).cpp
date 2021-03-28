@@ -67,3 +67,33 @@ struct disjoint_set {
         }
     }
 };
+
+/**
+ * find maximum edge in path(u, v)
+ */
+struct disjoint_set {
+    vector<int> par, dist;
+    disjoint_set(int n) : par(n, -1), dist(n) {}
+    int find(int u) {
+        while (par[u] >= 0) u = par[u];
+        return u;
+    }
+    void merge(int u, int v, int w) {
+        u = find(u), v = find(v);
+        if (u == v) return;
+
+        if (par[u] > par[v]) swap(u, v);
+        par[u] += par[v];
+        par[v] = u;
+        dist[v] = w;
+    }
+    int query(int u, int v) {
+        assert(u != v);
+        int ret;
+        for (; u != v; u = par[u]) {
+            if (dist[u] < dist[v]) swap(u, v);
+            ret = dist[u];
+        }
+        return ret;
+    }
+};
