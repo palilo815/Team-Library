@@ -1,7 +1,7 @@
 template <typename node_t>
-struct complete_seg {
-    complete_seg(int _n) : n(_n),
-                           tree(_n << 1, e) {}
+struct segtree {
+    segtree(int _n) : n(_n),
+                      tree(_n << 1, e) {}
 
     node_t& operator[](int i) { return tree[n + i]; }
     void build() {

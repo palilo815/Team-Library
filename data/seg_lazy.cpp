@@ -43,7 +43,7 @@ private:
         }
         if (lazy[i] != off) push(i);
 
-        const auto m = l + r >> 1;
+        const auto m = (l + r) >> 1;
         apply(ql, qr, f, l, m, lson), apply(ql, qr, f, m, r, rson);
         pull(i);
     }
@@ -52,7 +52,7 @@ private:
         if (ql <= l && r <= qr) return tree[i];
         if (lazy[i] != off) push(i);
 
-        const auto m = l + r >> 1;
+        const auto m = (l + r) >> 1;
         return op(prod(ql, qr, l, m, lson), prod(ql, qr, m, r, rson));
     }
     void pull(int i) {
