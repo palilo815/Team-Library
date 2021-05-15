@@ -1,5 +1,5 @@
 template <typename T>
-struct BIT {
+class BIT {
     BIT(int _n) : n(_n), tree(_n + 1) {}
     void update(int i, T val) {
         for (++i; i <= n; i += i & -i)

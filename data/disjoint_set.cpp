@@ -1,5 +1,7 @@
-struct disjoint_set {
+class disjoint_set {
     vector<int> par;
+
+public:
     disjoint_set(int n) : par(n, -1) {}
     int find(int u) {
         return par[u] < 0 ? u : par[u] = find(par[u]);
