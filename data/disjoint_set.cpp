@@ -11,7 +11,7 @@ public:
     int find(int u) {
         return par[u] < 0 ? u : par[u] = find(par[u]);
     }
-    bool merge(int u, int v) {
+    bool unite(int u, int v) {
         u = find(u), v = find(v);
         if (u == v) return false;
 
@@ -20,4 +20,6 @@ public:
         par[v] = u;
         return true;
     }
+    int size_of(int u) { return -par[find(u)]; }
+    bool is_same(int u, int v) { return find(u) == find(v); }
 };
