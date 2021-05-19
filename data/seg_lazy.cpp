@@ -1,5 +1,24 @@
+/**
+ * @brief 
+ *      Segment Tree with Lazy Propagation 
+ *
+ * @todo 
+ *      e, off       -> identity element
+ *      op           -> unite two nodes
+ *      mapping      -> apply tag to node
+ *      composition  -> unite two tags
+ * 
+ * @warning cannot use `bool` as `node_t` or `tag_t`
+ */
 template <typename node_t, typename tag_t>
-struct lazy_seg {
+class lazy_seg {
+    const node_t e = node_t {};
+    const tag_t off = tag_t {};
+    const int n, height, size;
+    vector<node_t> tree;
+    vector<tag_t> lazy;
+
+public:
     lazy_seg(int _n) : n(_n), height(__lg(_n - 1) + 1), size(1 << height),
                        tree(size << 1, e), lazy(size, off) {}
 
@@ -16,12 +35,6 @@ struct lazy_seg {
     }
 
 private:
-    const node_t e = node_t {};
-    const tag_t off = tag_t {};
-    const int n, height, size;
-    vector<node_t> tree;
-    vector<tag_t> lazy;
-
     inline int get_index(node_t& node) { return &node - tree.data(); }
     inline int get_depth(node_t& node) { return __lg(get_index(node)); }
     inline int get_height(node_t& node) { return height - get_depth(node); }
@@ -43,7 +56,7 @@ private:
         }
         if (lazy[i] != off) push(i);
 
-        const auto m = (l + r) >> 1;
+        int m = (l + r) >> 1;
         apply(ql, qr, f, l, m, lson), apply(ql, qr, f, m, r, rson);
         pull(i);
     }
@@ -52,7 +65,7 @@ private:
         if (ql <= l && r <= qr) return tree[i];
         if (lazy[i] != off) push(i);
 
-        const auto m = (l + r) >> 1;
+        int m = (l + r) >> 1;
         return op(prod(ql, qr, l, m, lson), prod(ql, qr, m, r, rson));
     }
     void pull(int i) {
@@ -68,13 +81,13 @@ private:
         if (i < size) composition(lazy[i], f);
     }
     node_t op(node_t lhs, node_t rhs) {
-        assert(true);
+        assert(false);
     }
     void mapping(node_t& node, tag_t f) {
-        assert(true);
+        assert(false);
     }
     void composition(tag_t& tag, tag_t f) {
-        assert(true);
+        assert(false);
     }
 #undef lson
 #undef rson

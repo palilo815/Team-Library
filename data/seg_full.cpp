@@ -1,5 +1,18 @@
-template <typename node_t>
-struct segtree {
+/**
+ * @brief 
+ *      Segment Tree
+ *
+ * @todo 
+ *      e, off  -> identity element
+ *      op      -> unite two nodes
+ */
+template <typename node_t = int>
+class segtree {
+    const node_t e = node_t {};
+    const int n, height, size;
+    vector<node_t> tree;
+
+public:
     segtree(int _n) : n(_n), height(__lg(_n - 1) + 1), size(1 << height),
                       tree(size << 1, e) {}
 
@@ -10,13 +23,11 @@ struct segtree {
     }
     void set(int idx, node_t val) {
         assert(0 <= idx and idx < n);
-
         tree[idx += size] = val;
         while (idx >>= 1) pull(idx);
     }
     node_t prod(int l, int r) {
         assert(0 <= l and l <= r and r <= n);
-
         node_t lval = e, rval = e;
         for (l += n, r += n; l != r; l >>= 1, r >>= 1) {
             if (l & 1) lval = op(lval, tree[l++]);
@@ -26,12 +37,6 @@ struct segtree {
     }
 
 private:
-#define lson (i << 1)
-#define rson (i << 1 | 1)
-    const node_t e = node_t {};
-    const int n, height, size;
-    vector<node_t> tree;
-
     inline int get_index(node_t& node) { return &node - tree.data(); }
     inline int get_depth(node_t& node) { return __lg(get_index(node)); }
     inline int get_height(node_t& node) { return height - get_depth(node); }
@@ -44,12 +49,10 @@ private:
     }
 
     void pull(int i) {
-        tree[i] = op(tree[lson], tree[rson]);
+        tree[i] = op(tree[i << 1], tree[i << 1 | 1]);
     }
     node_t op(node_t lhs, node_t rhs) {
-        assert(true);
+        assert(false);
         return node_t {};
     }
-#undef lson
-#undef rson
 };

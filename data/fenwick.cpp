@@ -1,3 +1,14 @@
+/**
+ * @brief 
+ *      Binary Indexed Tree (a.k.a. Fenwick Tree)
+ *
+ * @warning 
+ *      `query(l, r)` and `get(i)`  must be used when inverse operation exists
+ * 
+ *      `kth(k)`    the parameter `k` is 0-indexed
+ *                  e.g. if (k == 0) : return first element's position
+ *                          (k == 1) : return second ...      
+ */
 template <typename T = int>
 class BIT {
     const int n;
@@ -5,6 +16,7 @@ class BIT {
 
 public:
     BIT(int _n) : n(_n), tree(_n + 1) {}
+
     void update(int i, T val) {
         assert(0 <= i and i < n);
         for (++i; i <= n; i += i & -i)

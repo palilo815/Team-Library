@@ -1,7 +1,21 @@
-template <typename node_t>
-struct segtree {
-    segtree(int _n) : n(_n),
-                      tree(_n << 1, e) {}
+/**
+ * @brief 
+ *      Segment Tree
+ *
+ * @todo 
+ *      e, off  -> identity element
+ *      op      -> unite two nodes
+ * 
+ * @warning must be used when (length of interval) or (order) of child nodes doesn't matter
+ */
+template <typename node_t = int>
+class segtree {
+    const node_t e = node_t {};
+    const int n;
+    vector<node_t> tree;
+
+public:
+    segtree(int _n) : n(_n), tree(_n << 1, e) {}
 
     node_t& operator[](int i) { return tree[n + i]; }
     void build() {
@@ -10,13 +24,11 @@ struct segtree {
     }
     void set(int idx, node_t val) {
         assert(0 <= idx and idx < n);
-
         tree[idx += n] = val;
         while (idx >>= 1) pull(idx);
     }
     node_t prod(int l, int r) {
         assert(0 <= l and l <= r and r <= n);
-
         node_t ret = e;
         for (l += n, r += n; l != r; l >>= 1, r >>= 1) {
             if (l & 1) ret = op(ret, tree[l++]);
@@ -26,19 +38,11 @@ struct segtree {
     }
 
 private:
-#define lson (i << 1)
-#define rson (i << 1 | 1)
-    const node_t e = node_t {};
-    const int n;
-    vector<node_t> tree;
-
     void pull(int i) {
-        tree[i] = op(tree[lson], tree[rson]);
+        tree[i] = op(tree[i << 1], tree[i << 1 | 1]);
     }
     node_t op(node_t lhs, node_t rhs) {
-        assert(true);
+        assert(false);
         return node_t {};
     }
-#undef lson
-#undef rson
 };
