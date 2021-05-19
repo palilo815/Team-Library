@@ -1,15 +1,22 @@
 /**
- * @link https://github.com/kth-competitive-programming/kactl/blob/master/content/numerical/FastFourierTransform.h
+ * @link 
+ *      https://github.com/kth-competitive-programming/kactl/blob/master/content/numerical/FastFourierTransform.h
+ * @todo
+ *      douoble vs long double ???
+ *      double is not sufficient ???
+ *      if not sufficient:
+ *          R = vector<long double>
+ *          polar(1.0L, acos(-1.0L) / k);
  */
 namespace FFT {
 void fft(vector<complex<double>>& a) {
     const int n = a.size(), L = __lg(n);
-    static vector<complex<long double>> R(2, 1);
+    static vector<complex<double>> R(2, 1);
     static vector<complex<double>> rt(2, 1);
 
     for (static int k = 2; k < n; k <<= 1) {
         R.resize(n), rt.resize(n);
-        const auto x = polar(1.0L, acos(-1.0L) / k);
+        const auto x = polar(1.0, PI / k);
         for (int i = k; i < k << 1; ++i)
             rt[i] = R[i] = i & 1 ? R[i >> 1] * x : R[i >> 1];
     }
@@ -44,11 +51,11 @@ vector<int64_t> conv(const vector<int64_t>& a, const vector<int64_t>& b) {
 
     vector<complex<double>> out(n);
     for (int i = 0; i < n; ++i)
-        out[i] = in[-i & n - 1] - conj(in[i]);
+        out[i] = in[-i & (n - 1)] - conj(in[i]);
 
     fft(out);
     for (int i = 0; i < int(res.size()); ++i)
-        res[i] = int64_t(round(imag(out[i]))) / (n << 2);
+        res[i] = llround(imag(out[i])) / (n << 2);
     return res;
 }
 }; // namespace FFT
