@@ -6,7 +6,8 @@
  *      e, off  -> identity element
  *      op      -> unite two nodes
  * 
- * @warning must be used when (length of interval) or (order) of child nodes doesn't matter
+ * @warning
+ *      must be used when (length of interval) or (order) of child nodes doesn't matter
  */
 template <typename node_t = int>
 class segtree {

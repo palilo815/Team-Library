@@ -8,7 +8,8 @@
  *      mapping      -> apply tag to node
  *      composition  -> unite two tags
  * 
- * @warning cannot use `bool` as `node_t` or `tag_t`
+ * @warning
+ *      cannot use `bool` as `node_t` or `tag_t`
  */
 template <typename node_t, typename tag_t>
 class lazy_seg {
