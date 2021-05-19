@@ -1,3 +1,5 @@
+constexpr double PI = acos(-1.0);
+
 /**
  * @link 
  *      https://github.com/kth-competitive-programming/kactl/blob/master/content/numerical/FastFourierTransform.h
