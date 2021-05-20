@@ -1,13 +1,15 @@
 /**
  * @brief 
  *      Binary Indexed Tree (a.k.a. Fenwick Tree)
- *
- * @warning 
- *      `query(l, r)` and `get(i)`  must be used when inverse operation exists
  * 
- *      `kth(k)`    the parameter `k` is 0-indexed
- *                  e.g. if (k == 0) : return first element's position
- *                          (k == 1) : return second ...      
+ * @warning 
+ *      `query(l, r)` and `get(i)`  must be used when inverse operation exists    
+ * 
+ * @note
+ *      `lower_bound(k)`
+ *          @return minimum i s.t. sum[0...i] >= k
+ *      `upper_bound(k)`
+ *          @return minimum i s.t. sum[0...i] > k
  */
 template <typename T = int>
 class BIT {
@@ -37,14 +39,20 @@ public:
         assert(0 <= i and i < n);
         return i & 1 ? query(i, i + 1) : tree[i + 1];
     }
-    int kth(T k) {
-        int l = 0;
-        for (int len = 1 << __lg(n); len; len >>= 1)
-            if ((l | len) <= n && k >= tree[l | len])
-                k -= tree[l |= len];
-
-        if (l == n + 1 || (l == n && k >= tree[l]))
-            return n;
-        return l;
+    int lower_bound(T k) {
+        if (k <= 0) return -1;
+        int x = 0;
+        for (int pw = 1 << __lg(n); pw; pw >>= 1)
+            if ((x | pw) <= n && tree[x | pw] < k)
+                k -= tree[x |= pw];
+        return x;
+    }
+    int upper_bound(T k) {
+        if (k < 0) return -1;
+        int x = 0;
+        for (int pw = 1 << __lg(n); pw; pw >>= 1)
+            if ((x | pw) <= n && tree[x | pw] <= k)
+                k -= tree[x |= pw];
+        return x;
     }
 };
