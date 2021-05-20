@@ -100,6 +100,9 @@ class wavelet_matrix {
 public:
     template <typename T>
     wavelet_matrix(vector<T> data) : n(data.size()) {
+        for (const auto& x : data)
+            assert(0 <= x and x < (1ull << BITS));
+
         vector<uint8_t> bits(n);
         vector<T> next(n);
 
@@ -132,7 +135,6 @@ public:
         assert(0 <= value and value < (1ull << BITS));
         assert(0 <= k);
 
-        // do rank(value, 0, size) with logging
         vector<int> l(BITS + 1), r(BITS + 1);
         r[BITS] = fid[0].n;
 
@@ -143,7 +145,6 @@ public:
         }
         if (r[0] - l[0] <= k) return fid[0].n;
 
-        // trace the log inversely
         for (int d = 0; d < BITS; ++d) {
             bool p = value >> d & 1;
             k = fid[d].select(p, k, l[d + 1]) - l[d + 1];
