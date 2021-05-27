@@ -1,20 +1,20 @@
 /**
  * @brief
- * 	    fast Kuhn's algorithm
+ *      fast Kuhn's algorithm
  * 
  * @param n size of  left group
  * @param m	size of right group
  * 
  * @warning
- * 	    `minimum_vertex_cover` must be called after `maximum_matching`
+ *      `minimum_vertex_cover` must be called after `maximum_matching`
  * 
  * @note 
- * 	    `maximum_matching`      $ O(n^2 m) $	-> place small group to left!
- * 	    `minimum_vertex_cover`  $ O(n + m) $
+ *      `maximum_matching`      $ O(n^2 m) $	-> place small group to left!
+ *      `minimum_vertex_cover`  $ O(n + m) $
  * 			
  * @return
- * 	    `maximum_matching`	    # of maximum matching
- * 	    `minimum_vertex_cover`	ids of vertices
+ *      `maximum_matching`	    # of maximum matching
+ *      `minimum_vertex_cover`	ids of vertices
  *                              if id >= 0 -> vertex id in L
  *                              if id < 0 -> vertex ~id in R
  */
