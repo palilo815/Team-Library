@@ -9,7 +9,7 @@
  *      `minimum_vertex_cover` must be called after `maximum_matching`
  * 
  * @note 
- *      `maximum_matching`      $ O(n^2 m) $	-> place small group to left!
+ *      `maximum_matching`      $ O(n^2 m) $    -> place small group to left!
  *      `minimum_vertex_cover`  $ O(n + m) $
  * 			
  * @return
