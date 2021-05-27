@@ -3,7 +3,7 @@
  *      fast Kuhn's algorithm
  * 
  * @param n size of  left group
- * @param m	size of right group
+ * @param m size of right group
  * 
  * @warning
  *      `minimum_vertex_cover` must be called after `maximum_matching`
