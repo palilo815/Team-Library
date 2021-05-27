@@ -1,36 +1,32 @@
 /**
- * @brief 정점이 두 그룹(L, R)으로 나뉘는 이분 그래프일 때 최대 매칭과, 최소 점 덮개를 구함.
- * @example bipartite_matching solver(n, m);
-
-            cout << solver.maximum_matching() << endl;
-
-            vector<int> vtx = solver.minimum_vertex_cover();
-            for (const auto& id : vtx) {
-                if (id >= 0)
-                    cout << id << " in L" << endl;
-                else
-                    cout << ~id << " in R" << endl;
-            }
+ * @brief
+ * 		fast Kuhn's algorithm
+ * 
+ * @param n size of  left group
+ * @param m	size of right group
+ * 
+ * @warning
+ * 		`minimum_vertex_cover` must be called after `maximum_matching`
+ * 
+ * @note 
+ * 		`maximum_matching`  	$ O(n^2 m) $	-> place small group to left!
+ * 		`minimum_vertex_cover`	$ O(n + m) $
+ * 			
+ * @return
+ * 		`maximum_matching`		# of maximum matching
+ * 		`minimum_vertex_cover`	ids of vertices
+ * 								if id >= 0 -> vertex id in L
+ * 								if id < 0 -> vertex ~id in R
  */
-struct bipartite_matching {
-    /**
-     * @param _n size of (L)
-     * @param _m size of (R)
-     */
+class bipartite_matching {
+public:
     bipartite_matching(int _n, int _m) : n(_n), m(_m),
                                          adj(n), match(n, -1), rev(m, -1), visited(n) {}
 
-    /**
-     * @brief add edge from $u(\in L)$ to $v(\in R)$
-     */
     void add_edge(int u, int v) {
         assert(0 <= u and u < n and 0 <= v and v < m);
         adj[u].emplace_back(v);
     }
-    /**
-     * @note $O(n^2 m)$
-     * @return # of maximum matching
-     */
     int maximum_matching() {
         for (bool update = true; update;) {
             fill(visited.begin(), visited.end(), false);
@@ -42,14 +38,6 @@ struct bipartite_matching {
         }
         return n - count(match.begin(), match.end(), -1);
     }
-    /**
-     * @warning MUST BE USED AFTER `maximum_matching`
-     * 
-     * @note $O(n + m)$
-     * @return ids of vertices
-     *         if id >= 0 -> vertex id in L
-     *         if id < 0 -> vertex ~id in R
-     */
     vector<int> minimum_vertex_cover() {
         vector<bool> check(m);
         auto bfs = [&](int src) {
