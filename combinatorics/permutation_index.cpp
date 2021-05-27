@@ -8,7 +8,7 @@
  *      `unindex` = [lexicographical index] -> [permutation]
  * 
  * @warning
- * 		duplicated numbers are NOT allowed
+ *      duplicated numbers are NOT allowed
  * 
  * @note 
  *      $ O(n \log n) $
