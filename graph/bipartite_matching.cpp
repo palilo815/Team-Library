@@ -13,7 +13,7 @@
  *      `minimum_vertex_cover`  $ O(n + m) $
  * 			
  * @return
- *      `maximum_matching`	    # of maximum matching
+ *      `maximum_matching`      # of maximum matching
  *      `minimum_vertex_cover`	ids of vertices
  *                              if id >= 0 -> vertex id in L
  *                              if id < 0 -> vertex ~id in R
