@@ -3,6 +3,7 @@
  *      Dinitz's algorithm (a.k.a. Dinic)
  * 
  * @warning
+ *      edges are directed? or undirected?
  *      to choose `flow_t`, you must consider the sum of flows.
  * 
  * @note
@@ -19,7 +20,7 @@ class dinitz {
 public:
     dinitz(int _n) : n(_n), adj(_n), level(_n), ptr(_n) {}
 
-    void add_edge(int u, int v, int c) {
+    void add_edge(int u, int v, flow_t c) {
         assert(0 <= u and u < n and 0 <= v and v < n);
         adj[u].emplace_back(v, adj[v].size(), c);
         adj[v].emplace_back(u, adj[u].size() - 1, 0);
