@@ -46,11 +46,21 @@ struct point2D {
     P normal_int() const { return perp_ccw().unit_int(); }
 
     bool same_dir(const P& p) const { return cross(p) == 0 && dot(p) > 0; }
-    bool on_segment(const P& s, const P& e) {
+    bool on_segment(const P& s, const P& e) const {
         if constexpr (is_integral_v<T>)
             return cross(s, e) == 0 && (s - *this).dot(e - *this) <= 0;
         else
             return cross(s, e) == 0 && (s - *this).dot(e - *this) <= 1e-9;
+    }
+    int side_of(const P& s, const P& e) const {
+        if constexpr (is_integral_v<T>) {
+            auto c = s.cross(e, *this);
+            return (c > 0) - (c < 0);
+        } else {
+            auto a = (e - s).cross(*this - s);
+            double l = (e - s).dist() * 1e-9;
+            return (a > l) - (a < -l);
+        }
     }
 
     double angle() const { return atan2(y, x); }
