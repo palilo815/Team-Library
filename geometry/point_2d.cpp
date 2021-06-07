@@ -46,9 +46,14 @@ struct point2D {
     P normal_int() const { return perp_ccw().unit_int(); }
 
     bool same_dir(const P& p) const { return cross(p) == 0 && dot(p) > 0; }
-    // angle to x-axis in interval (-pi, pi]
+    bool on_segment(const P& s, const P& e) {
+        if constexpr (is_integral_v<T>)
+            return cross(s, e) == 0 && (s - *this).dot(e - *this) <= 0;
+        else
+            return cross(s, e) == 0 && (s - *this).dot(e - *this) <= 1e-9;
+    }
+
     double angle() const { return atan2(y, x); }
-    // returns point rotated 'a' radians ccw around the origin
     P rotate(double radian) const {
         return P(x * cos(radian) - y * sin(radian), x * sin(radian) + y * cos(radian));
     }
