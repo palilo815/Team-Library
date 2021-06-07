@@ -15,9 +15,9 @@ struct point2D {
 
     using P = point2D;
 
-    bool operator<(P p) const { return tie(x, y) < tie(p.x, p.y); }
-    bool operator==(P p) const { return tie(x, y) == tie(p.x, p.y); }
-    bool operator!=(P p) const { return tie(x, y) != tie(p.x, p.y); }
+    bool operator<(const P& p) const { return tie(x, y) < tie(p.x, p.y); }
+    bool operator==(const P& p) const { return tie(x, y) == tie(p.x, p.y); }
+    bool operator!=(const P& p) const { return tie(x, y) != tie(p.x, p.y); }
 
     friend P operator+(const P& a, const P& b) { return P(a.x + b.x, a.y + b.y); }
     friend P operator-(const P& a, const P& b) { return P(a.x - b.x, a.y - b.y); }
