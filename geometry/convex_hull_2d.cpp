@@ -6,6 +6,7 @@
  * @return
  *      points of the hull in ccw order
  */
+namespace geo {
 template <typename T>
 vector<point2D<T>> convex_hull(vector<point2D<T>> pts) {
     if (pts.size() <= 1) return pts;
@@ -19,3 +20,4 @@ vector<point2D<T>> convex_hull(vector<point2D<T>> pts) {
         }
     return {hull.begin(), hull.begin() + t - (t == 2 && hull[0] == hull[1])};
 }
+}; // namespace geo
