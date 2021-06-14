@@ -1,22 +1,18 @@
 /**
- * @brief 
- *      Segment Tree
- *
- * @todo 
- *      e, off  -> identity element
- *      op      -> unite two nodes
- * 
- * @warning
- *      must be used when (length of interval) or (order) of child nodes doesn't matter
+ * @author  palilo 
+ * @brief   Segment Tree
+ * @warning must be used when (length of interval) or (order) of child nodes doesn't matter
+ * @todo    e  -> identity element
+ *          op -> unite two nodes
  */
-template <typename node_t = int>
+template <typename node_t>
 class segtree {
     const node_t e = node_t {};
     const int n;
     vector<node_t> tree;
 
 public:
-    segtree(int _n) : n(_n), tree(_n << 1, e) {}
+    segtree(int _n) : n(_n), tree(n << 1, e) {}
 
     node_t& operator[](int i) { return tree[n + i]; }
     void build() {

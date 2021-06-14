@@ -1,17 +1,20 @@
 /**
- * @brief 
- *      Disjoint Set Union (a.k.a Union-Find)
+ * @author  palilo
+ * @brief   Disjoint Set Union (a.k.a Union-Find)
+ * @warning no `assert`
+ *          dsu is so simple, we do not need such a error handler. isn't it?
  */
 class disjoint_set {
+    const int n;
+    vector<int> par;
+
 public:
     disjoint_set(int _n) : n(_n), par(n, -1) {}
 
     int find(int u) {
-        assert(0 <= u and u < n);
         return par[u] < 0 ? u : par[u] = find(par[u]);
     }
     bool unite(int u, int v) {
-        assert(0 <= u and u < n and 0 <= v and v < n);
         u = find(u), v = find(v);
         if (u == v) return false;
 
@@ -20,16 +23,9 @@ public:
         par[v] = u;
         return true;
     }
-    int size_of(int u) {
-        assert(0 <= u and u < n);
-        return -par[find(u)];
+    int size_of(int u) { return -par[find(u)]; }
+    bool is_same(int u, int v) { return find(u) == find(v); }
+    int num_components() const {
+        return count_if(par.begin(), par.end(), [&](auto& x) { return x < 0; });
     }
-    bool is_same(int u, int v) {
-        assert(0 <= u and u < n and 0 <= v and v < n);
-        return find(u) == find(v);
-    }
-
-private:
-    const int n;
-    vector<int> par;
 };
