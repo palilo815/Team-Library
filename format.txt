@@ -1,0 +1,12 @@
+/**
+ * @author  palilo
+ * @link    https://something/some.cpp
+ * @brief   name of the algorithm or short description <= 2 lines
+ * @tparam  ~~
+ * @param   ~~
+ * @note    time/space complexity and tips to decrese them
+ * @return  what is returned
+ * @warning warning message
+ * @todo    if the code is not completed (cannot use as just a copy-paste)
+ *          mention what should i do
+ */
