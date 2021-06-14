@@ -1,12 +1,17 @@
 /**
- * @brief 
- *      Miller-Rabin & Pollard's rho
+ * @link  https://github.com/kth-competitive-programming/kactl/blob/main/content/number-theory/MillerRabin.h
+ *        https://github.com/kth-competitive-programming/kactl/blob/main/content/number-theory/Factor.h 
+ * @brief Miller-Rabin & Pollard's rho
+ * @note  `is_prime(n)`  $ O(\log n) $
+ *        `factorize(n)` $ O(n^{1/4})$
  */
 class primality_test {
     using num = unsigned long long;
+    const vector<num> base_small = {2, 7, 61},
+                      base_large = {2, 325, 9375, 28178, 450775, 9780504, 1795265022};
 
 public:
-    bool is_prime(num n) {
+    bool is_prime(num n) const {
         if (n < 2) return false;
         if (n == 2 || n == 3) return true;
         if (n % 6 != 1 && n % 6 != 5) return false;
@@ -21,7 +26,7 @@ public:
         }
         return true;
     }
-    vector<num> factorize(num n) {
+    vector<num> factorize(num n) const {
         if (n == 1) return {};
         if (is_prime(n)) return {n};
 
@@ -34,10 +39,7 @@ public:
     }
 
 private:
-    const vector<num> base_small = {2, 7, 61},
-                      base_large = {2, 325, 9375, 28178, 450775, 9780504, 1795265022};
-
-    num pow_mod(num a, num p, num m) {
+    num pow_mod(num a, num p, num m) const {
         num ret = 1;
         for (; p; p >>= 1) {
             if (p & 1) ret = mul_mod(ret, a, m);
@@ -45,11 +47,11 @@ private:
         }
         return ret;
     }
-    num mul_mod(num a, num b, num m) {
+    num mul_mod(num a, num b, num m) const {
         int64_t ret = a * b - m * num(1.L / m * a * b);
         return ret + m * (ret < 0) - m * (ret >= int64_t(m));
     }
-    bool check_composite(num n, num x, num d, int s) {
+    bool check_composite(num n, num x, num d, int s) const {
         x = pow_mod(x, d, n);
         if (x == 1 || x == n - 1) return false;
         while (--s) {
@@ -58,7 +60,7 @@ private:
         }
         return true;
     };
-    num pollard(num n) {
+    num pollard(num n) const {
         auto f = [&](num x) { return mul_mod(x, x, n) + 1; };
         num x = 0, y = 0, prd = 2, i = 1, q;
         for (int t = 30; t++ % 40 || gcd(prd, n) == 1; x = f(x), y = f(f(y))) {
