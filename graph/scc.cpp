@@ -1,47 +1,52 @@
 /**
- * @brief 
- * 		Strongly Connected Component
+ * @author palilo
+ * @brief  implement Tarjan's scc algorithm
  */
-class SCC {
-public:
-    SCC(vector<vector<int>>& _adj) : adj(_adj), n(adj.size()), low(n), dis(n, -1) {}
+class scc {
+    const int n;
+    vector<vector<int>> adj;
 
-    vector<vector<int>> grouping() {
+public:
+    int num_components = 0;
+    vector<int> component_id;
+
+    scc(int _n) : n(_n), adj(n), component_id(n, -1), dis(n, -1), low(n) {}
+
+    void add_edge(int u, int v) {
+        assert(0 <= u and u < n and 0 <= v and v < n);
+        adj[u].emplace_back(v);
+    }
+    void run() {
         for (int i = 0; i < n; ++i)
             if (dis[i] == -1)
                 dfs(i);
-        return ret;
+        assert(stk.empty());
     }
 
 private:
-    const vector<vector<int>>& adj;
-    const int n;
-
-    vector<int> stk, low, dis;
-    vector<vector<int>> ret;
-    int t = 0;
+    vector<int> stk, dis, low;
+    int dfs_time = 0;
 
     void dfs(int u) {
-        low[u] = dis[u] = t++;
+        low[u] = dis[u] = dfs_time++;
         stk.emplace_back(u);
 
         for (const auto& v : adj[u])
             if (dis[v] == -1) {
                 dfs(v);
-                low[u] = min(low[u], low[v]);
+                chmin(low[u], low[v]);
             } else
-                low[u] = min(low[u], dis[v]);
+                chmin(low[u], dis[v]);
 
         if (low[u] == dis[u]) {
-            vector<int> group;
-            for (;;) {
-                int x = stk.back();
+            int x;
+            do {
+                x = stk.back();
                 stk.pop_back();
-                dis[x] = n;
-                group.emplace_back(x);
-                if (x == u) break;
-            }
-            ret.emplace_back(group);
+                dis[x] = INT_MAX;
+                component_id[x] = num_components;
+            } while (x != u);
+            ++num_components;
         }
     }
 };
