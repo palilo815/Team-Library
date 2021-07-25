@@ -29,7 +29,7 @@ vector<pair<dist_t, int>> bellman_ford(int n, vector<edge_t>& edges, int s) {
         for (const auto& e : edges) {
             auto &cur = nodes[e.u], &dest = nodes[e.v];
             if (abs(cur.first) == inf) continue;
-            if (T d = cur.first + e.w; d < dest.first) {
+            if (dist_t d = cur.first + e.w; d < dest.first) {
                 dest.second = e.u;
                 dest.first = (i == lim - 1 ? -inf : d);
             }
