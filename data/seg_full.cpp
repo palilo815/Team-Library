@@ -1,7 +1,6 @@
 /**
  * @brief 
  *      Segment Tree
- *
  * @todo 
  *      e, off  -> identity element
  *      op      -> unite two nodes

@@ -7,11 +7,9 @@
  * 
  * @warning
  *      `minimum_vertex_cover` must be called after `maximum_matching`
- * 
  * @note 
  *      `maximum_matching`      $ O(n^2 m) $    -> place small group to left!
  *      `minimum_vertex_cover`  $ O(n + m) $
- * 			
  * @return
  *      `maximum_matching`      # of maximum matching
  *      `minimum_vertex_cover`	ids of vertices
@@ -19,6 +17,11 @@
  *                              if id < 0 -> vertex ~id in R
  */
 class bipartite_matching {
+    const int n, m;
+    vector<vector<int>> adj;
+    vector<int> match, rev;
+    vector<bool> visited;
+
 public:
     bipartite_matching(int _n, int _m) : n(_n), m(_m),
                                          adj(n), match(n, -1), rev(m, -1), visited(n) {}
@@ -77,11 +80,6 @@ public:
     }
 
 private:
-    const int n, m;
-    vector<vector<int>> adj;
-    vector<int> match, rev;
-    vector<bool> visited;
-
     bool dfs(int u) {
         visited[u] = true;
         for (const auto& v : adj[u]) {

@@ -1,13 +1,11 @@
 /**
  * @brief 
  *      Segment Tree with Lazy Propagation 
- *
  * @todo 
  *      e, off       -> identity element
  *      op           -> unite two nodes
  *      mapping      -> apply tag to node
  *      composition  -> unite two tags
- * 
  * @warning
  *      cannot use `bool` as `node_t` or `tag_t`
  */
