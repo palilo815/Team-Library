@@ -17,11 +17,11 @@ public:
         for (int i = n - 1; i; --i) len[i] = len[i << 1] + len[i << 1 | 1];
     }
     /**
-	 * @brief   insert/remove segment [l, r)
-	 * @param l MUST BE A COMPRESSED INDEX 
-	 * @param r MUST BE A COMPRESSED INDEX 
-	 * @param v 1 if insert, -1 if remove
-	 */
+     * @brief   insert/remove segment [l, r)
+     * @param l MUST BE A COMPRESSED INDEX 
+     * @param r MUST BE A COMPRESSED INDEX 
+     * @param v 1 if insert, -1 if remove
+     */
     void update(int l, int r, int v) {
         l += n, r += n;
         const int l0 = l, r0 = r;
