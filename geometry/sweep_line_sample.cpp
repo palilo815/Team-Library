@@ -44,6 +44,8 @@ int main() {
     freopen("in", "r", stdin);
     freopen("out", "w", stdout);
 #endif
+    // input)  n rectangles [x1, x2] \times [y1, y2]
+    // output) total area covered by the given rectangles
     int n;
     cin >> n;
     vector<line_t> a(n << 1);
