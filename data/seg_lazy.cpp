@@ -1,25 +1,28 @@
 /**
- * @brief 
- *      Segment Tree with Lazy Propagation 
- * @todo 
- *      e, off       -> identity element
- *      op           -> unite two nodes
- *      mapping      -> apply tag to node
- *      composition  -> unite two tags
- * @warning
- *      cannot use `bool` as `node_t` or `tag_t`
+ * @author  palilo
+ * @brief   segment tree with lazy propagation 
+ * @todo    `node_t` and `tag_t` -> define type
+ *          `e` and `off`        -> set identity element
+ *          `op`                 -> unite two nodes
+ *          `mapping`            -> apply tag to node
+ *          `composition`        -> unite two tags
+ * @warning be careful for setting value `e`, it will used for... 
+ *          1. dummy nodes(out of range)
+ *          2. initial value in `prod` and `op`
+ *          cannot use `bool` as `node_t` or `tag_t` (I use l-value reference)
  */
-template <typename node_t, typename tag_t>
-class lazy_seg {
+class lazy_segtree {
+    // change this //
+    using node_t = int;
+    using tag_t = int;
+
     const node_t e = node_t {};
     const tag_t off = tag_t {};
-    const int n, height, size;
-    vector<node_t> tree;
-    vector<tag_t> lazy;
+    // change this //
 
 public:
-    lazy_seg(int _n) : n(_n), height(__lg(_n - 1) + 1), size(1 << height),
-                       tree(size << 1, e), lazy(size, off) {}
+    lazy_segtree(int _n) : n(_n), height(__lg(_n - 1) + 1), size(1 << height),
+                           tree(size << 1, e), lazy(size, off) {}
 
     node_t& operator[](int i) { return tree[size + i]; }
     void build() {
@@ -34,6 +37,12 @@ public:
     }
 
 private:
+#define lson (i << 1)
+#define rson (i << 1 | 1)
+    const int n, height, size;
+    vector<node_t> tree;
+    vector<tag_t> lazy;
+
     inline int get_index(node_t& node) { return &node - tree.data(); }
     inline int get_depth(node_t& node) { return __lg(get_index(node)); }
     inline int get_height(node_t& node) { return height - get_depth(node); }
@@ -44,9 +53,6 @@ private:
         int len = 1 << height - dep;
         return len * (idx ^ 1 << dep);
     }
-
-#define lson (i << 1)
-#define rson (i << 1 | 1)
     void apply(int ql, int qr, tag_t f, int l, int r, int i) {
         if (qr <= l || r <= ql) return;
         if (ql <= l && r <= qr) {
@@ -81,6 +87,8 @@ private:
     }
     node_t op(node_t lhs, node_t rhs) {
         assert(false);
+        node_t r(e);
+        return r;
     }
     void mapping(node_t& node, tag_t f) {
         assert(false);
