@@ -1,6 +1,7 @@
 /**
  * @link https://github.com/ecnerwala/cp-book/blob/master/src/modnum.hpp
  */
+namespace ecnerwala {
 template <typename T>
 T mod_inv_in_range(T a, T m) {
     T x = a, y = m;
@@ -113,3 +114,7 @@ public:
     friend modnum operator*(const modnum& a, const modnum& b) { return modnum(a) *= b; }
     friend modnum operator/(const modnum& a, const modnum& b) { return modnum(a) /= b; }
 };
+}; // namespace ecnerwala
+
+using mint = ecnerwala::modnum<998244353>;
+// using mint = ecnerwala::modnum<int(1e9 + 7)>;
