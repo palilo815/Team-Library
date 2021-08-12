@@ -1,29 +1,3 @@
-/**
- * @link https://github.com/ecnerwala/cp-book/blob/master/src/modnum.hpp
- */
-namespace ecnerwala {
-template <typename T>
-T mod_inv_in_range(T a, T m) {
-    T x = a, y = m;
-    T vx = 1, vy = 0;
-    while (x) {
-        T k = y / x;
-        y %= x;
-        vy -= k * vx;
-        std::swap(x, y);
-        std::swap(vx, vy);
-    }
-    assert(y == 1);
-    return vy < 0 ? m + vy : vy;
-}
-
-template <typename T>
-T mod_inv(T a, T m) {
-    a %= m;
-    a = a < 0 ? a + m : a;
-    return mod_inv_in_range(a, m);
-}
-
 template <int MOD_>
 struct modnum {
     static constexpr int MOD = MOD_;
@@ -51,9 +25,33 @@ public:
     friend bool operator==(const modnum& a, const modnum& b) { return a.v == b.v; }
     friend bool operator!=(const modnum& a, const modnum& b) { return a.v != b.v; }
 
+    template <typename T>
+    modnum pow(T p) const {
+        assert(p >= 0);
+        modnum res, x = *this;
+        res.v = 1;
+        for (; p; p >>= 1) {
+            if (p & 1) res *= x;
+            x *= x;
+        }
+        return res;
+    }
+    template <typename T>
+    friend modnum pow(const modnum& x, T p) { return x.pow(p); }
     modnum inv() const {
+        int x = v, y = MOD;
+        int vx = 1, vy = 0;
+        while (x) {
+            const int k = y / x;
+            y %= x;
+            vy -= k * vx;
+            std::swap(x, y);
+            std::swap(vx, vy);
+        }
+        assert(y == 1);
+        if (vy < 0) vy += MOD;
         modnum res;
-        res.v = mod_inv_in_range(v, MOD);
+        res.v = vy;
         return res;
     }
     friend modnum inv(const modnum& m) { return m.inv(); }
@@ -72,13 +70,13 @@ public:
     }
 
     modnum& operator++() {
-        v++;
+        ++v;
         if (v == MOD) v = 0;
         return *this;
     }
     modnum& operator--() {
         if (v == 0) v = MOD;
-        v--;
+        --v;
         return *this;
     }
     modnum& operator+=(const modnum& o) {
@@ -114,7 +112,6 @@ public:
     friend modnum operator*(const modnum& a, const modnum& b) { return modnum(a) *= b; }
     friend modnum operator/(const modnum& a, const modnum& b) { return modnum(a) /= b; }
 };
-}; // namespace ecnerwala
 
-using mint = ecnerwala::modnum<998244353>;
-// using mint = ecnerwala::modnum<int(1e9 + 7)>;
+using mint = modnum<998244353>;
+// using mint = modnum<int(1e9 + 7)>;
