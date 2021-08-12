@@ -1,13 +1,9 @@
 /**
- * @author
- *      palilo
- * @brief
- *      get intersection point of the two objects
- * @warning
- *      precision in `sign(cross)`. it can be greater than `EPS`
- * @return
- *      pair(# of intersection points, point)
- *           -1 means infinity
+ * @author  palilo
+ * @brief   get intersection point of the two objects
+ * @warning precision in `sign(cross)`. it can be greater than `EPS`
+ *          `line_line`: it is assumed they're MUST be intersected
+ * @return  intersection point
  */
 namespace geo::intersection {
 template <typename T>
@@ -27,5 +23,11 @@ pair<int, point2D<double>> segment_segment(const pair<point2D<T>, point2D<T>>& u
     if (any_of(pts.begin() + 1, pts.end(), [&](const auto& p) { return sign((p - pts.front()).dist()); }))
         return {-1, point2D<double>()};
     return {1, point2D<double>(pts.front())};
+}
+
+template <typename T>
+point2D<double> line_line(const pair<point2D<T>, point2D<T>>& u, const pair<point2D<T>, point2D<T>>& v) {
+    return (u.first * v.first.cross(u.second, v.second) + u.second * v.first.cross(v.second, u.first)) /
+           (u.second - u.first).cross(v.second - v.first);
 }
 }; // namespace geo::intersection

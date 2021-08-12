@@ -1,9 +1,8 @@
 /**
- * @link
- *      https://github.com/kth-competitive-programming/kactl/blob/main/content/geometry/MinimumEnclosingCircle.h
- * @return
- *      {centre, radius} of the minimum enclosing circle of the given points
+ * @link   https://github.com/kth-competitive-programming/kactl/blob/main/content/geometry/MinimumEnclosingCircle.h
+ * @return {centre, radius} of the minimum enclosing circle of the given points
  */
+namespace geo {
 template <class P = point2D<double>>
 pair<P, double> mec(vector<P> ps) {
     shuffle(ps.begin(), ps.end(), mt19937(time(0)));
@@ -27,3 +26,4 @@ pair<P, double> mec(vector<P> ps) {
     }
     return {o, r};
 }
+}; // namespace geo
