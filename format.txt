@@ -7,6 +7,25 @@
  * @note    time/space complexity and tips to decrese them
  * @return  what is returned
  * @warning warning message
+ * @details description
  * @todo    if the code is not completed (cannot use as just a copy-paste)
  *          mention what should i do
  */
+
+class data_structure {
+    using some_t = int;
+
+    basic variable // n, adj, ... 
+
+public:
+    result variable
+
+    data_structure(...) : ... {...}
+
+    functions...
+
+private:
+    variables used in deep algorithm
+
+    helper functions...
+}
