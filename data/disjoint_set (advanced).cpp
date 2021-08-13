@@ -69,30 +69,38 @@ struct disjoint_set {
 };
 
 /**
- * find maximum edge in path(u, v)
+ * @author palilo
+ * @brief  minimize maximum weight in path u -> v
  */
-struct disjoint_set {
-    vector<int> par, dist;
-    disjoint_set(int n) : par(n, -1), dist(n) {}
+template <typename T, typename f = less<T>>
+class disjoint_set {
+    // change this (1/1)
+    const T e = 0x3f3f3f3f;
+    const f cmp {};
+    // change this (1/1)
+    const int n;
+    vector<int> par;
+    vector<T> weight;
+
+public:
+    disjoint_set(int n) : n(n), par(n, -1), weight(n, e) {}
     int find(int u) {
         while (par[u] >= 0) u = par[u];
         return u;
     }
-    void merge(int u, int v, int w) {
+    void unite(int u, int v, T w) {
         u = find(u), v = find(v);
         if (u == v) return;
-
         if (par[u] > par[v]) swap(u, v);
         par[u] += par[v];
         par[v] = u;
-        dist[v] = w;
+        weight[v] = w;
     }
-    int query(int u, int v) {
-        assert(u != v);
-        int ret;
+    T query(int u, int v) {
+        T ret = e;
         for (; u != v; u = par[u]) {
-            if (dist[u] < dist[v]) swap(u, v);
-            ret = dist[u];
+            if (cmp(weight[v], weight[u])) swap(u, v);
+            ret = weight[u];
         }
         return ret;
     }
