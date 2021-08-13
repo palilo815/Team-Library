@@ -47,8 +47,9 @@ class wavelet_matrix {
     vector<int> mid_point;
 
 public:
-    wavelet_matrix(vector<T> v) : size(v.size()), height(1 + __lg(*max_element(v.begin(), v.end()))),
-                                  bit_matrix(height, bit_array(size)), mid_point(height) {
+    wavelet_matrix(vector<T> v) : wavelet_matrix(move(v), 1 + __lg(*max_element(v.begin(), v.end()))) {}
+    wavelet_matrix(vector<T> v, size_t height) : size(v.size()), height(height),
+                                                 bit_matrix(height, bit_array(size)), mid_point(height) {
         for (const auto& x : v) {
             assert(x >= 0);
         }
@@ -68,6 +69,16 @@ public:
             shrink(l, r, h, x >> h & 1);
         }
         return r - l;
+    }
+    // # of values in [0, upper) in range [l, r)
+    size_t range_freq(size_t l, size_t r, T upper) {
+        size_t ret = 0;
+        for (auto h = height; h--;) {
+            const bool value = upper >> h & 1;
+            if (value) ret += bit_matrix[h].rank(l, r, false);
+            shrink(l, r, h, value);
+        }
+        return ret;
     }
     // # of values in [lower, upper) in range [l, r)
     size_t range_freq(size_t l, size_t r, T lower, T upper) {
@@ -96,14 +107,5 @@ private:
     void shrink(size_t& l, size_t& r, size_t h, bool value) const {
         l = bit_matrix[h].rank(l, value) + mid_point[h] * value;
         r = bit_matrix[h].rank(r, value) + mid_point[h] * value;
-    }
-    size_t range_freq(size_t l, size_t r, T upper) {
-        size_t ret = 0;
-        for (auto h = height; h--;) {
-            const bool value = upper >> h & 1;
-            if (value) ret += bit_matrix[h].rank(l, r, false);
-            shrink(l, r, h, value);
-        }
-        return ret;
     }
 };
