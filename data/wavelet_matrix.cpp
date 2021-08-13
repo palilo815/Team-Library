@@ -2,7 +2,6 @@
  * @author  palilo
  * @brief   wavelet_matrix & helper class bit_array for bit prefix sum
  * @warning only non-negative integers are allowed in wavelet_matrix
- *          but allowed in compressed_wavelet_matrix. it will perform coordinate compression
  */
 
 class bit_array {
@@ -15,23 +14,27 @@ class bit_array {
 public:
     bit_array(size_t n) : size((n + 63) >> 6), bit(size), pref(size + 1) {}
 
-    void set(size_t i, bool v) {
-        const auto block_id = i >> 6, bit_id = i & 63;
-        bit[block_id] = (bit[block_id] & ~(static_cast<block_t>(1) << bit_id)) | (static_cast<block_t>(v) << bit_id);
-    }
     void build() {
         for (size_t i = 0; i != size; ++i) {
             pref[i + 1] = pref[i] + __builtin_popcountll(bit[i]);
         }
     }
+    // set i-th bit to value
+    void set(size_t i, bool value) {
+        const auto block_id = i >> 6, bit_id = i & 63;
+        bit[block_id] = (bit[block_id] & ~(static_cast<block_t>(1) << bit_id)) | (static_cast<block_t>(value) << bit_id);
+    }
+    // # of value in [0, r)
     size_t rank(size_t r, bool value) const {
         return value ? rank(r) : r - rank(r);
     }
+    // # of value in [l, r)
     size_t rank(size_t l, size_t r, bool value) const {
         return value ? rank(r) - rank(l) : (r - l) - (rank(r) - rank(l));
     }
 
 private:
+    // # of true in [0, r)
     size_t rank(size_t r) const {
         return pref[r >> 6] + __builtin_popcountll(bit[r >> 6] & ((static_cast<block_t>(1) << (r & 63)) - 1));
     }
@@ -59,19 +62,22 @@ public:
             }) - v.begin();
         }
     }
-    // # of x in [0, r)
-    size_t rank(size_t r, T x) const {
-        size_t l = 0;
-        for (size_t h = height; h--;) {
+    // # of x in [l, r)
+    size_t rank(size_t l, size_t r, T x) const {
+        for (auto h = height; h--;) {
             shrink(l, r, h, x >> h & 1);
         }
         return r - l;
     }
+    // # of values in [lower, upper) in range [l, r)
+    size_t range_freq(size_t l, size_t r, T lower, T upper) {
+        return range_freq(l, r, upper) - range_freq(l, r, lower);
+    }
     // k-th (0-based) smallest value in [l, r)
     T kth_smallest(size_t l, size_t r, size_t k) const {
         size_t ret = 0;
-        for (size_t h = height; h--;) {
-            const auto zeros = bit_matrix[h].rank(r, false) - bit_matrix[h].rank(l, false);
+        for (auto h = height; h--;) {
+            const auto zeros = bit_matrix[h].rank(l, r, false);
             const auto value = zeros <= k;
             if (value) {
                 ret |= static_cast<T>(1) << h;
@@ -91,39 +97,13 @@ private:
         l = bit_matrix[h].rank(l, value) + mid_point[h] * value;
         r = bit_matrix[h].rank(r, value) + mid_point[h] * value;
     }
-};
-
-template <typename T>
-class compressed_wavelet_matrix {
-    vector<T> sorted_v;
-    wavelet_matrix<T> wm;
-
-public:
-    compressed_wavelet_matrix(vector<T> v) : sorted_v(v), wm(move(compress(move(v)))) {}
-
-    size_t rank(size_t r, T x) const {
-        return wm.rank(r, get_index(x));
-    }
-    T kth_smallest(size_t l, size_t r, size_t k) const {
-        return sorted_v[wm.kth_smallest(l, r, k)];
-    }
-    T kth_largest(size_t l, size_t r, size_t k) const {
-        return sorted_v[wm.kth_largeest(l, r, k)];
-    }
-
-private:
-    int get_index(T value) {
-        auto it = lower_bound(sorted_v.begin(), sorted_v.end(), value);
-        assert(it != sorted_v.end() && !(value < *it));
-        return it - sorted_v.begin();
-    }
-    vector<int> compress(const vector<T> v) {
-        sort(sorted_v.begin(), sorted_v.end());
-        sorted_v.erase(unique(sorted_v.begin(), sorted_v.end()), sorted_v.end());
-        vector<int> index(v.size());
-        transform(v.begin(), v.end(), index.begin(), [&](const auto& x) {
-            return lower_bound(sorted_v.begin(), sorted_v.end(), x) - sorted_v.begin();
-        });
-        return index;
+    size_t range_freq(size_t l, size_t r, T upper) {
+        size_t ret = 0;
+        for (auto h = height; h--;) {
+            const bool value = upper >> h & 1;
+            if (value) ret += bit_matrix[h].rank(l, r, false);
+            shrink(l, r, h, value);
+        }
+        return ret;
     }
 };
