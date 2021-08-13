@@ -26,7 +26,7 @@ public:
 
     node_t& operator[](int i) { return tree[size + i]; }
     void build() {
-        for (int i = size - 1; i; --i)
+        for (int i = size; i--;)
             pull(i);
     }
     void apply(int l, int r, tag_t f) {

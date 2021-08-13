@@ -17,7 +17,7 @@ public:
 
     node_t& operator[](int i) { return tree[size + i]; }
     void build() {
-        for (int i = size - 1; i; --i)
+        for (int i = size; i--;)
             pull(i);
     }
     void set(int idx, node_t val) {
