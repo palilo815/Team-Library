@@ -72,11 +72,11 @@ struct disjoint_set {
  * @author palilo
  * @brief  minimize maximum weight in path u -> v
  */
-template <typename T, typename f = less<T>>
+template <typename T, typename F = less<T>>
 class disjoint_set {
     // change this (1/1)
     const T e = 0x3f3f3f3f;
-    const f cmp {};
+    const F cmp {};
     // change this (1/1)
     const int n;
     vector<int> par;
