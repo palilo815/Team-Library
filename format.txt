@@ -10,6 +10,7 @@
  * @details description
  * @todo    if the code is not completed (cannot use as just a copy-paste)
  *          mention what should i do
+ * @example data_structure<T, F> foo(data, n);
  */
 
 class data_structure {
