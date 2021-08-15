@@ -1,24 +1,31 @@
 /**
- * sparse_table rmq(move(vector));
+ * @author  palilo
+ * @brief   sparse table
+ * @note    $O(1)$ for query, $O(n \log n)$ for initialization
+ *          in most cases, segment tree is better
+ * @example range minimum query
+ *          auto f = [&](const int& l, const int& r) { return min(l, r); };
+ *          sparse_table<int, decltype(f)> sparse(a, f);
  */
-template <typename T>
-struct sparse_table {
-    sparse_table(vector<T> a) : n(a.size()), dp(__lg(n) + 1) {
-        dp[0] = a;
-        for (int i = 1, k = 1; i < int(dp.size()); ++i, k <<= 1) {
+template <typename T, typename F>
+class sparse_table {
+    const size_t n;
+    vector<vector<T>> dp;
+    const F f;
+
+public:
+    sparse_table(vector<T> a, F f) : n(a.size()), dp(__lg(n) + 1), f(move(f)) {
+        dp[0] = move(a);
+        for (size_t i = 1, k = 1; i < dp.size(); ++i, k <<= 1) {
             dp[i].resize(n - (k << 1) + 1);
-            for (int j = 0; j + (k << 1) <= n; ++j)
-                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j + k]);
+            for (size_t j = 0; j + (k << 1) <= n; ++j)
+                dp[i][j] = f(dp[i - 1][j], dp[i - 1][j + k]);
         }
     }
-    T query(int l, int r) {
-        assert(0 <= l && r <= n);
+    T query(size_t l, size_t r) {
         if (l == r) return 0;
-        const int k = __lg(r - l);
-        return max(dp[k][l], dp[k][r - (1 << k)]);
+        assert(0 <= l and l < r and r <= n);
+        const size_t k = __lg(r - l);
+        return f(dp[k][l], dp[k][r - (1 << k)]);
     }
-
-private:
-    const int n;
-    vector<vector<T>> dp;
 };
