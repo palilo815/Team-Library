@@ -1,8 +1,8 @@
 /**
  * @author  palilo 
- * @brief   segment tree (complete binary tree, i.e. every non-leaf nodes have 2 child nodes)
- * @warning must be used when (length of interval) or (order) of child nodes doesn't matter
- *          if it's matter, use `seg_full`. it is full binary tree
+ * @brief   segment-tree (complete binary tree, i.e. every non-leaf nodes have 2 child nodes)
+ * @warning must be used when (length of interval) or (order) of the child nodes doesn't matter
+ *          if it is matter, use "seg_full" (full binary tree).
  * @todo    e  <- identity element (op(e, any_value) = e)
  *          op <- unite two nodes
  */
@@ -28,7 +28,7 @@ public:
         tree[idx += n] = val;
         while (idx >>= 1) pull(idx);
     }
-    node_t prod(size_t l, size_t r) {
+    node_t prod(size_t l, size_t r) const {
         assert(0 <= l and l <= r and r <= n);
         node_t ret = e;
         for (l += n, r += n; l != r; l >>= 1, r >>= 1) {
@@ -37,13 +37,15 @@ public:
         }
         return ret;
     }
+    node_t all_prod() const { return tree[1]; }
+    void clear() { fill(tree.begin(), tree.end(), e); }
 
 private:
     void pull(size_t i) {
         tree[i] = op(tree[i << 1], tree[i << 1 | 1]);
     }
     // change this (2/2)
-    node_t op(node_t lhs, node_t rhs) {
+    node_t op(node_t lhs, node_t rhs) const {
         assert(false);
         return node_t {};
     }

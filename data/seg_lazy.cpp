@@ -1,23 +1,20 @@
 /**
  * @author  palilo
- * @brief   segment tree with lazy propagation 
- * @todo    `node_t` and `tag_t` <- define type
- *          `e` and `off`        <- set identity element
+ * @brief   segment tree with lazy propagation
+ * @todo    `e` and `off`        <- identity element
  *          `op`                 <- unite two nodes
  *          `mapping`            <- apply tag to node
  *          `composition`        <- unite two tags
- * @warning be careful for setting value `e`, it will used for... 
+ * @warning be careful for setting value `e`, it will used for...
  *          1. dummy nodes (out of range)
  *          2. initial value in `prod` and `op`
  *          cannot use `bool` as `node_t` or `tag_t` (i use l-value reference)
  */
+template <typename node_t, typename tag_t>
 class lazy_segtree {
     // change this (1/2)
-    using node_t = int;
-    using tag_t = int;
-
-    const node_t e = node_t {};
-    const tag_t off = tag_t {};
+    const node_t e {};
+    const tag_t off {};
     // change this (1/2)
     const size_t n, height, size;
     vector<node_t> tree;
@@ -43,11 +40,11 @@ public:
 private:
 #define lson (i << 1)
 #define rson (i << 1 | 1)
-    inline int get_index(node_t& node) { return &node - tree.data(); }
-    inline int get_depth(node_t& node) { return __lg(get_index(node)); }
-    inline int get_height(node_t& node) { return height - get_depth(node); }
-    inline int get_length(node_t& node) { return 1 << get_height(node); }
-    inline int get_first(node_t& node) {
+    inline int get_index(node_t& node) const { return &node - tree.data(); }
+    inline int get_depth(node_t& node) const { return __lg(get_index(node)); }
+    inline int get_height(node_t& node) const { return height - get_depth(node); }
+    inline int get_length(node_t& node) const { return 1 << get_height(node); }
+    inline int get_first(node_t& node) const {
         int idx = get_index(node);
         int dep = __lg(idx);
         int len = 1 << height - dep;
@@ -86,7 +83,7 @@ private:
         if (i < size) composition(lazy[i], f);
     }
     // change this (2/2)
-    node_t op(node_t lhs, node_t rhs) {
+    node_t op(node_t lhs, node_t rhs) const {
         assert(false);
         return node_t {};
     }

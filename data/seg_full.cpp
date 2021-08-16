@@ -1,6 +1,9 @@
 /**
  * @author  palilo 
  * @brief   segment tree (full binary tree, i.e. # of nodes = 2^k-1)
+ * @warning be careful for setting value `e`, it will used for... 
+ *          1. dummy nodes (out of range)
+ *          2. initial value in `prod` and `op`
  * @todo    e  <- identity element
  *          op <- unite two nodes
  */
@@ -25,7 +28,7 @@ public:
         tree[idx += size] = val;
         while (idx >>= 1) pull(idx);
     }
-    node_t prod(size_t l, size_t r) {
+    node_t prod(size_t l, size_t r) const {
         assert(0 <= l and l <= r and r <= n);
         node_t lval = e, rval = e;
         for (l += size, r += size; l != r; l >>= 1, r >>= 1) {
@@ -36,11 +39,11 @@ public:
     }
 
 private:
-    inline int get_index(node_t& node) { return &node - tree.data(); }
-    inline int get_depth(node_t& node) { return __lg(get_index(node)); }
-    inline int get_height(node_t& node) { return height - get_depth(node); }
-    inline int get_length(node_t& node) { return 1 << get_height(node); }
-    inline int get_first(node_t& node) {
+    inline int get_index(node_t& node) const { return &node - tree.data(); }
+    inline int get_depth(node_t& node) const { return __lg(get_index(node)); }
+    inline int get_height(node_t& node) const { return height - get_depth(node); }
+    inline int get_length(node_t& node) const { return 1 << get_height(node); }
+    inline int get_first(node_t& node) const {
         int idx = get_index(node);
         int dep = __lg(idx);
         int len = 1 << height - dep;
@@ -50,7 +53,7 @@ private:
         tree[i] = op(tree[i << 1], tree[i << 1 | 1]);
     }
     // change this (2/2)
-    node_t op(node_t lhs, node_t rhs) {
+    node_t op(node_t lhs, node_t rhs) const {
         assert(false);
         return node_t {};
     }
