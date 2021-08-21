@@ -1,25 +1,19 @@
 /**
- * @link
- *      https://github.com/kth-competitive-programming/kactl/blob/main/content/geometry/Point.h
- * @brief
- *      some basic functions and struct `point2D`
- * @warning
- *      integer overflow in `dot`, `cross`, `dist2`
- *      just use `long long`. NOT `int`
- *      choose some proper `EPS` value
+ * @link    https://github.com/kth-competitive-programming/kactl/blob/main/content/geometry/Point.h
+ * @brief   some basic functions and struct `point2D`
+ * @warning integer overflow in `dot`, `cross`, `dist2` 
+ *          just use `long long` if cannot sure the maximum value 
+ *          choose some proper `EPS` value
  */
-
-/* basics */
 namespace geo {
+/* basics */
 #define EPS 1e-8
 template <typename T, enable_if_t<is_integral<T>::value, bool> = true>
 int sign(T x) { return (x > 0) - (x < 0); }
 template <typename T, enable_if_t<is_floating_point<T>::value, bool> = true>
 int sign(T x) { return (x > EPS) - (x < -EPS); }
-}; // namespace geo
 
 /* point2D */
-namespace geo {
 template <typename T>
 struct point2D {
     T x, y;
