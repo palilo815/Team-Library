@@ -36,6 +36,9 @@ public:
     node_t prod(size_t l, size_t r) {
         return prod(l, r, 0, size, 1);
     }
+    node_t all_prod() const {
+        return tree[1];
+    }
 
 private:
 #define lson (i << 1)
