@@ -7,8 +7,6 @@
  */
 class primality_test {
     using num = unsigned long long;
-    const vector<num> base_small = {2, 7, 61},
-                      base_large = {2, 325, 9375, 28178, 450775, 9780504, 1795265022};
 
 public:
     bool is_prime(num n) const {
@@ -16,29 +14,32 @@ public:
         if (n == 2 || n == 3) return true;
         if (n % 6 != 1 && n % 6 != 5) return false;
 
-        const auto& base = n < 4759123141ULL ? base_small : base_large;
-        const int s = __builtin_ctzll(n - 1);
-        const num d = n >> s;
+        const auto s = __builtin_ctzll(n - 1);
+        const auto d = n >> s;
+        auto base = n < 4759123141ULL ? base_small.data() : base_large.data();
 
-        for (const auto& b : base) {
-            if (b >= n) break;
-            if (check_composite(n, b, d, s)) return false;
+        for (; *base && *base < n; ++base) {
+            if (check_composite(n, *base, d, s)) {
+                return false;
+            }
         }
         return true;
     }
-    vector<num> factorize(num n) const {
+    std::vector<num> factorize(num n) const {
         if (n == 1) return {};
         if (is_prime(n)) return {n};
 
-        const num x = pollard(n);
+        const auto x = pollard(n);
         auto l = factorize(x), r = factorize(n / x);
 
-        decltype(l) ret(l.size() + r.size());
-        merge(l.begin(), l.end(), r.begin(), r.end(), ret.begin());
-        return ret;
+        l.insert(l.end(), r.begin(), r.end());
+        return l;
     }
 
 private:
+    static constexpr std::array<num, 4> base_small = {2, 7, 61, 0};
+    static constexpr std::array<num, 8> base_large = {2, 325, 9375, 28178, 450775, 9780504, 1795265022, 0};
+
     num pow_mod(num a, num p, num m) const {
         num ret = 1;
         for (; p; p >>= 1) {
@@ -63,10 +64,10 @@ private:
     num pollard(num n) const {
         auto f = [&](num x) { return mul_mod(x, x, n) + 1; };
         num x = 0, y = 0, prd = 2, i = 1, q;
-        for (int t = 30; t++ % 40 || gcd(prd, n) == 1; x = f(x), y = f(f(y))) {
+        for (int t = 30; t++ % 40 || std::gcd(prd, n) == 1; x = f(x), y = f(f(y))) {
             if (x == y) x = ++i, y = f(x);
             if ((q = mul_mod(prd, x > y ? x - y : y - x, n))) prd = q;
         }
-        return gcd(prd, n);
+        return std::gcd(prd, n);
     }
 };
