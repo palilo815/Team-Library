@@ -18,9 +18,9 @@ public:
         return true;
     }
 
-    auto size_of(size_t u) { return -par[find(u)]; }
+    auto size_of(int u) { return -par[find(u)]; }
 
-    auto same(size_t u, size_t v) { return find(u) == find(v); }
+    auto same(int u, int v) { return find(u) == find(v); }
 
     [[nodiscard]] auto num_components() const {
         return std::count_if(par.begin(), par.end(), [&](const auto& x) { return x < 0; });
